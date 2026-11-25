@@ -1,0 +1,361 @@
+@import "tailwindcss";
+
+@layer base {
+  :root,
+  [data-theme="dark"] {
+    color-scheme: dark;
+    /* Rich Dark Walnut, Warm Sand & Forest Pine Wood Tokens */
+    --bg-canvas: #15110e;
+    --bg-surface: #221b16;
+    --bg-surface-grad-top: #261e18;
+    --bg-surface-grad-bot: #1d1712;
+    --bg-surface-elevated: #2c231c;
+    --bg-surface-elevated-bot: #231c16;
+    --bg-surface-hover: #352a22;
+    --bg-inset: #18130f;
+    --bg-header: rgba(21, 17, 14, 0.9);
+    --bg-popover: #221b15;
+
+    --border-subtle: rgba(235, 214, 184, 0.11);
+    --border-strong: rgba(235, 214, 184, 0.2);
+
+    --text-primary: #f3ead8;
+    --text-secondary: #b6a690;
+    --text-muted: #857562;
+
+    --accent: #3e7c59;
+    --accent-hover: #4b9069;
+    --accent-soft: #263d2f;
+    --accent-border: rgba(114, 190, 147, 0.34);
+    --accent-text: #74c094;
+    --accent-on: #faf5ec;
+
+    --amber: #d99b52;
+    --amber-soft: rgba(217, 155, 82, 0.16);
+    --danger: #e48474;
+    --danger-bg: rgba(176, 68, 54, 0.18);
+    --danger-border: rgba(228, 132, 116, 0.34);
+
+    --shadow-card:
+      0 10px 26px -12px rgba(0, 0, 0, 0.62),
+      0 2px 6px rgba(0, 0, 0, 0.36),
+      inset 0 1px 0 rgba(246, 232, 206, 0.09);
+    --shadow-btn:
+      0 3px 8px -3px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(246, 232, 206, 0.1);
+    --shadow-btn-primary:
+      0 6px 14px -5px rgba(24, 66, 42, 0.7),
+      inset 0 1px 0 rgba(230, 252, 238, 0.26);
+    --shadow-inset: inset 0 2px 5px rgba(0, 0, 0, 0.48), inset 0 -1px 0 rgba(246, 232, 206, 0.05);
+    --shadow-popover: 0 18px 40px -12px rgba(0, 0, 0, 0.76), 0 2px 10px rgba(0, 0, 0, 0.45);
+
+    --canvas-glow-1: rgba(116, 82, 50, 0.24);
+    --canvas-glow-2: rgba(62, 124, 89, 0.11);
+    --wood-grain-line: rgba(243, 234, 216, 0.018);
+    --scroll-thumb: rgba(182, 166, 144, 0.24);
+    --scroll-thumb-hover: rgba(116, 192, 148, 0.52);
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    --font-serif-stage: "Merriweather", Georgia, serif;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    /* Warm Sunlit Sanded Oak, Cedar & Forest Pine Wood Tokens */
+    --bg-canvas: #efe5d3;
+    --bg-surface: #f7efe2;
+    --bg-surface-grad-top: #faf4e9;
+    --bg-surface-grad-bot: #f2e7d5;
+    --bg-surface-elevated: #ece0cc;
+    --bg-surface-elevated-bot: #e3d4bc;
+    --bg-surface-hover: #dfd0b6;
+    --bg-inset: #e6dac5;
+    --bg-header: rgba(239, 229, 211, 0.92);
+    --bg-popover: #faf4e9;
+
+    --border-subtle: rgba(88, 62, 36, 0.14);
+    --border-strong: rgba(88, 62, 36, 0.24);
+
+    --text-primary: #291f16;
+    --text-secondary: #68523d;
+    --text-muted: #8f775f;
+
+    --accent: #2f6b49;
+    --accent-hover: #387d56;
+    --accent-soft: #d9e8dc;
+    --accent-border: rgba(47, 107, 73, 0.34);
+    --accent-text: #245a3c;
+    --accent-on: #faf6ee;
+
+    --amber: #b36f1f;
+    --amber-soft: rgba(179, 111, 31, 0.14);
+    --danger: #b54233;
+    --danger-bg: rgba(181, 66, 51, 0.11);
+    --danger-border: rgba(181, 66, 51, 0.3);
+
+    --shadow-card:
+      0 8px 22px -12px rgba(72, 49, 26, 0.18),
+      0 1px 3px rgba(72, 49, 26, 0.08),
+      inset 0 1px 0 rgba(255, 252, 245, 0.8);
+    --shadow-btn:
+      0 2px 5px -2px rgba(72, 49, 26, 0.16),
+      inset 0 1px 0 rgba(255, 252, 245, 0.72);
+    --shadow-btn-primary:
+      0 4px 12px -4px rgba(34, 84, 56, 0.42),
+      inset 0 1px 0 rgba(235, 255, 242, 0.26);
+    --shadow-inset: inset 0 1px 4px rgba(72, 49, 26, 0.13), inset 0 -1px 0 rgba(255, 252, 245, 0.55);
+    --shadow-popover: 0 16px 36px -12px rgba(64, 43, 22, 0.22), 0 2px 8px rgba(64, 43, 22, 0.1);
+
+    --canvas-glow-1: rgba(196, 152, 98, 0.26);
+    --canvas-glow-2: rgba(47, 107, 73, 0.08);
+    --wood-grain-line: rgba(92, 66, 40, 0.028);
+    --scroll-thumb: rgba(104, 82, 61, 0.26);
+    --scroll-thumb-hover: rgba(47, 107, 73, 0.5);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 15px;
+    background-color: var(--bg-canvas);
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scroll-thumb) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 150ms ease;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scroll-thumb-hover);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--bg-canvas);
+    background-image:
+      repeating-linear-gradient(
+        176deg,
+        transparent 0px,
+        transparent 28px,
+        var(--wood-grain-line) 29px,
+        transparent 31px
+      ),
+      radial-gradient(ellipse 90% 55% at 50% -10%, var(--canvas-glow-1), transparent 70%),
+      radial-gradient(ellipse 60% 45% at 88% 100%, var(--canvas-glow-2), transparent 65%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 260ms ease, color 220ms ease;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Warm Carved Wood Studio Surfaces */
+.wood-card {
+  background: linear-gradient(180deg, var(--bg-surface-grad-top) 0%, var(--bg-surface-grad-bot) 100%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.wood-popover {
+  background: var(--bg-popover);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-popover);
+}
+
+.wood-inset {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-inset);
+}
+
+.wood-btn-pine {
+  background: linear-gradient(180deg, var(--accent-hover) 0%, var(--accent) 100%);
+  color: var(--accent-on);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: var(--shadow-btn-primary);
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), filter 140ms ease, box-shadow 140ms ease;
+}
+
+.wood-btn-pine:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.wood-btn-pine:active:not(:disabled) {
+  transform: translateY(0.5px) scale(0.99);
+}
+
+.wood-btn-surface {
+  background: linear-gradient(180deg, var(--bg-surface-elevated) 0%, var(--bg-surface-elevated-bot) 100%);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-btn);
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), border-color 140ms ease, filter 140ms ease;
+}
+
+.wood-btn-surface:hover:not(:disabled) {
+  border-color: var(--border-strong);
+  filter: brightness(1.04);
+}
+
+.wood-btn-surface:active:not(:disabled) {
+  transform: translateY(0.5px) scale(0.99);
+}
+
+.wood-btn-moss {
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  border: 1px solid var(--accent-border);
+  box-shadow: var(--shadow-btn);
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), filter 140ms ease;
+}
+
+.wood-btn-moss:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.wood-btn-moss:active:not(:disabled) {
+  transform: translateY(0.5px) scale(0.99);
+}
+
+/* Precision Wood Range Slider */
+input[type="range"].wood-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"].wood-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--accent);
+  border: 2px solid var(--bg-surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+input[type="range"].wood-range::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  background: var(--accent-hover);
+}
+
+input[type="range"].wood-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--accent);
+  border: 2px solid var(--bg-surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Soundwave Theme Toggle Animations */
+@keyframes cadence-wave-bar {
+  0% {
+    transform: scaleY(0.45);
+  }
+  35% {
+    transform: scaleY(1.35);
+  }
+  70% {
+    transform: scaleY(0.65);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cadence-sound-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.72;
+  }
+  100% {
+    transform: scale(2.85);
+    opacity: 0;
+  }
+}
+
+.animate-wave-bar-1 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cadence-wave-bar 420ms cubic-bezier(0.22, 1, 0.36, 1) 0ms 1;
+}
+
+.animate-wave-bar-2 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cadence-wave-bar 420ms cubic-bezier(0.22, 1, 0.36, 1) 55ms 1;
+}
+
+.animate-wave-bar-3 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cadence-wave-bar 420ms cubic-bezier(0.22, 1, 0.36, 1) 110ms 1;
+}
+
+.animate-sound-ring {
+  animation: cadence-sound-ring 520ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

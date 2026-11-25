@@ -1,0 +1,6 @@
+{
+  "name": "Cadence Prompt",
+  "description": "A tactile Material Design 3 teleprompter studio that calibrates your natural reading speed with timed and voice-activity testing, rich inline formatting, and deeply customizable client-side prompting.",
+  "requestFramePermissions": ["microphone", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
