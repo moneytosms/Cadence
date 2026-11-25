@@ -1,0 +1,89 @@
+<svg width="1200" height="236" viewBox="0 0 1200 236" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cadence 4-step studio workflow: Calibrate, Script, Tune, Prompt">
+  <defs>
+    <linearGradient id="wfBg" x1="0" y1="0" x2="1200" y2="236" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1B1510"/>
+      <stop offset="100%" stop-color="#14100C"/>
+    </linearGradient>
+    <linearGradient id="stepCard" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#271F18"/>
+      <stop offset="100%" stop-color="#1E1712"/>
+    </linearGradient>
+    <linearGradient id="stepCardActive" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1F3629"/>
+      <stop offset="100%" stop-color="#182A20"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="1198" height="234" rx="18" fill="url(#wfBg)" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1.5"/>
+
+  <!-- Header label -->
+  <text x="36" y="38" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="600" letter-spacing="1.4">STUDIO WORKFLOW</text>
+  <text x="1164" y="38" text-anchor="end" fill="#7AC49A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="500">MEASURE · WRITE · TUNE · RECORD</text>
+
+  <!-- Connector arrows between steps -->
+  <g stroke="#63AD82" stroke-opacity="0.45" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="292" y1="132" x2="318" y2="132"/>
+    <path d="M312 126L318 132L312 138"/>
+
+    <line x1="582" y1="132" x2="608" y2="132"/>
+    <path d="M602 126L608 132L602 138"/>
+
+    <line x1="872" y1="132" x2="898" y2="132"/>
+    <path d="M892 126L898 132L892 138"/>
+  </g>
+
+  <!-- Step 01: Calibrate -->
+  <g transform="translate(36, 58)">
+    <rect width="252" height="148" rx="14" fill="url(#stepCard)" stroke="#F3EAD8" stroke-opacity="0.11" stroke-width="1.2"/>
+    <rect x="18" y="18" width="34" height="34" rx="9" fill="#2E241C" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1"/>
+    <!-- Mic / wave glyph -->
+    <path d="M26 35H30L32.5 27L35.5 43L38.5 31L40.5 35H44" stroke="#7AC49A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="234" y="39" text-anchor="end" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" font-weight="600">01</text>
+    <text x="18" y="80" fill="#F3EAD8" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="700">Calibrate Pace</text>
+    <text x="18" y="104" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">Read a short passage aloud.</text>
+    <text x="18" y="124" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">Web Audio VAD tracks pauses</text>
+    <text x="18" y="140" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Slow · Natural · Brisk WPM</text>
+  </g>
+
+  <!-- Step 02: Script -->
+  <g transform="translate(326, 58)">
+    <rect width="252" height="148" rx="14" fill="url(#stepCard)" stroke="#F3EAD8" stroke-opacity="0.11" stroke-width="1.2"/>
+    <rect x="18" y="18" width="34" height="34" rx="9" fill="#2E241C" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1"/>
+    <!-- Document lines glyph -->
+    <line x1="26" y1="29" x2="44" y2="29" stroke="#D99B52" stroke-width="2" stroke-linecap="round"/>
+    <line x1="26" y1="35" x2="42" y2="35" stroke="#F3EAD8" stroke-opacity="0.85" stroke-width="2" stroke-linecap="round"/>
+    <line x1="26" y1="41" x2="37" y2="41" stroke="#7AC49A" stroke-width="2" stroke-linecap="round"/>
+    <text x="234" y="39" text-anchor="end" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" font-weight="600">02</text>
+    <text x="18" y="80" fill="#F3EAD8" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="700">Write &amp; Cue</text>
+    <text x="18" y="104" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">Borderless single-scroll editor</text>
+    <text x="18" y="124" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">with inline timing &amp; custom cues.</text>
+    <text x="18" y="140" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">[PAUSE 2s] · [BEAT] · [SLIDE]</text>
+  </g>
+
+  <!-- Step 03: Tune -->
+  <g transform="translate(616, 58)">
+    <rect width="252" height="148" rx="14" fill="url(#stepCard)" stroke="#F3EAD8" stroke-opacity="0.11" stroke-width="1.2"/>
+    <rect x="18" y="18" width="34" height="34" rx="9" fill="#2E241C" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1"/>
+    <!-- Slider glyph -->
+    <line x1="25" y1="35" x2="45" y2="35" stroke="#B8A995" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="37" cy="35" r="4" fill="#63AD82"/>
+    <text x="234" y="39" text-anchor="end" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" font-weight="600">03</text>
+    <text x="18" y="80" fill="#F3EAD8" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="700">Solve Runtime</text>
+    <text x="18" y="104" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">Preview live scroll speed or</text>
+    <text x="18" y="124" fill="#B8A995" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">solve WPM for a target duration.</text>
+    <text x="18" y="140" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Word-density duration math</text>
+  </g>
+
+  <!-- Step 04: Prompt -->
+  <g transform="translate(906, 58)">
+    <rect width="258" height="148" rx="14" fill="url(#stepCardActive)" stroke="#63AD82" stroke-opacity="0.4" stroke-width="1.2"/>
+    <rect x="18" y="18" width="34" height="34" rx="9" fill="#2A4D39" stroke="#7AC49A" stroke-opacity="0.3" stroke-width="1"/>
+    <!-- Play triangle glyph -->
+    <path d="M31 28.5L41 35L31 41.5V28.5Z" fill="#8CD4AA"/>
+    <text x="240" y="39" text-anchor="end" fill="#7AC49A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12" font-weight="600">04</text>
+    <text x="18" y="80" fill="#F3EAD8" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-weight="700">Prompt at 60fps</text>
+    <text x="18" y="104" fill="#D4E3D9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">GPU-composited scroll stage</text>
+    <text x="18" y="124" fill="#D4E3D9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13">with webcam framing &amp; mirror.</text>
+    <text x="18" y="140" fill="#8CD4AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Voice Guard · Clicker Ready</text>
+  </g>
+</svg>

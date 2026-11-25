@@ -1,9 +1,22 @@
+# Dependencies & build output
 node_modules/
 build/
 dist/
 coverage/
-.DS_Store
-*.log
+.cache/
+.npm/
+*.tsbuildinfo
+
+# Environment files
 .env*
 !.env.example
-.vercel
+*.local
+
+# Platform & deployment caches
+.vercel/
+.aistudio/
+
+# Logs & OS artifacts
+*.log
+.DS_Store
+Thumbs.db

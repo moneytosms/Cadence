@@ -1,0 +1,105 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cadence - Client-side browser teleprompter studio">
+  <defs>
+    <linearGradient id="bgLight" x1="0" y1="0" x2="1200" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F7F0E4"/>
+      <stop offset="55%" stop-color="#F1E6D6"/>
+      <stop offset="100%" stop-color="#E8DAC6"/>
+    </linearGradient>
+    <linearGradient id="medallionLight" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FAF2E6"/>
+      <stop offset="100%" stop-color="#DFCBB0"/>
+    </linearGradient>
+    <linearGradient id="waveGradLight" x1="30" y1="20" x2="56" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#265A3D"/>
+      <stop offset="60%" stop-color="#32724E"/>
+      <stop offset="100%" stop-color="#B36F1F"/>
+    </linearGradient>
+    <linearGradient id="accentWaveLight" x1="640" y1="160" x2="1180" y2="160" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2D6847" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#2D6847" stop-opacity="0.34"/>
+      <stop offset="72%" stop-color="#B36F1F" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#B36F1F" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="oakGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(150 128) rotate(35) scale(340 200)">
+      <stop offset="0%" stop-color="#2D6847" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#2D6847" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="cardClipLight">
+      <rect x="1" y="1" width="1198" height="318" rx="20"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#cardClipLight)">
+    <rect width="1200" height="320" fill="url(#bgLight)"/>
+    <rect width="1200" height="320" fill="url(#oakGlow)"/>
+
+    <!-- Subtle sunlit oak woodgrain curves -->
+    <path d="M-40 62C190 42 380 86 640 58C870 34 1030 68 1240 44" stroke="#5A422B" stroke-opacity="0.06" stroke-width="1.2"/>
+    <path d="M-40 124C210 102 420 144 690 116C920 92 1060 128 1240 106" stroke="#5A422B" stroke-opacity="0.05" stroke-width="1.2"/>
+    <path d="M-40 198C180 180 410 218 670 190C910 166 1050 202 1240 184" stroke="#5A422B" stroke-opacity="0.06" stroke-width="1.2"/>
+    <path d="M-40 264C230 246 460 282 720 256C940 234 1080 268 1240 250" stroke="#5A422B" stroke-opacity="0.05" stroke-width="1.2"/>
+
+    <!-- Decorative acoustic rings on far right -->
+    <circle cx="1065" cy="160" r="158" stroke="#2D6847" stroke-opacity="0.1" stroke-width="1.2"/>
+    <circle cx="1065" cy="160" r="118" stroke="#5A422B" stroke-opacity="0.08" stroke-width="1.2"/>
+    <circle cx="1065" cy="160" r="78" stroke="#B36F1F" stroke-opacity="0.12" stroke-width="1.2"/>
+
+    <!-- Ambient voice cadence wave across right half -->
+    <path d="M640 160H770L790 132L812 192L834 114L858 206L882 140L902 178L922 152L942 166L964 160H1160" stroke="url(#accentWaveLight)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Cadence Logo Medallion (Sunlit Oak variant) -->
+    <g transform="translate(74, 72) scale(1.6875)">
+      <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#medallionLight)" stroke="#48311A" stroke-opacity="0.22" stroke-width="1.5"/>
+      <path d="M32 11.5C20.7 11.5 11.5 20.7 11.5 32C11.5 43.3 20.7 52.5 32 52.5C39.2 52.5 45.6 48.7 49.2 43" stroke="#7A5E42" stroke-width="2.4" stroke-linecap="round" opacity="0.52"/>
+      <path d="M32 17.5C24 17.5 17.5 24 17.5 32C17.5 40 24 46.5 32 46.5C37.2 46.5 41.7 43.8 44.3 39.7" stroke="#3B2B1D" stroke-width="2.6" stroke-linecap="round" opacity="0.88"/>
+      <path d="M32 23.5C27.3 23.5 23.5 27.3 23.5 32C23.5 36.7 27.3 40.5 32 40.5" stroke="#2D6847" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M30 32H35.5L38.2 23.5L42.2 41L45.8 27.5L48.5 34.5L51 32H54.5" stroke="url(#waveGradLight)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="30" cy="32" r="2.2" fill="#B36F1F"/>
+    </g>
+
+    <!-- Title & Subtitle -->
+    <text x="210" y="122" fill="#2A1F15" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" letter-spacing="-0.5">Cadence</text>
+    <text x="212" y="156" fill="#5D4A37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="18.5" font-weight="400">
+      Client-side browser teleprompter studio for natural webcam delivery.
+    </text>
+
+    <!-- Bottom Spec Bar -->
+    <line x1="74" y1="224" x2="1126" y2="224" stroke="#48311A" stroke-opacity="0.14" stroke-width="1"/>
+
+    <!-- Spec Item 1 -->
+    <g transform="translate(74, 246)">
+      <rect width="196" height="36" rx="9" fill="#FAF4EA" stroke="#48311A" stroke-opacity="0.16" stroke-width="1"/>
+      <circle cx="18" cy="18" r="4" fill="#2D6847"/>
+      <text x="32" y="22.5" fill="#2F2318" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12.5" font-weight="600">100% LOCAL-FIRST</text>
+    </g>
+
+    <!-- Spec Item 2 -->
+    <g transform="translate(286, 246)">
+      <rect width="160" height="36" rx="9" fill="#FAF4EA" stroke="#48311A" stroke-opacity="0.16" stroke-width="1"/>
+      <circle cx="18" cy="18" r="4" fill="#B36F1F"/>
+      <text x="32" y="22.5" fill="#2F2318" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12.5" font-weight="600">ZERO AI APIS</text>
+    </g>
+
+    <!-- Spec Item 3 -->
+    <g transform="translate(462, 246)">
+      <rect width="186" height="36" rx="9" fill="#FAF4EA" stroke="#48311A" stroke-opacity="0.16" stroke-width="1"/>
+      <circle cx="18" cy="18" r="4" fill="#32724E"/>
+      <text x="32" y="22.5" fill="#2F2318" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12.5" font-weight="600">60FPS GPU STAGE</text>
+    </g>
+
+    <!-- Spec Item 4 -->
+    <g transform="translate(664, 246)">
+      <rect width="204" height="36" rx="9" fill="#FAF4EA" stroke="#48311A" stroke-opacity="0.16" stroke-width="1"/>
+      <circle cx="18" cy="18" r="4" fill="#7A5E42"/>
+      <text x="32" y="22.5" fill="#2F2318" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12.5" font-weight="600">WEB AUDIO RMS VAD</text>
+    </g>
+
+    <!-- Right-aligned tech badge -->
+    <g transform="translate(972, 246)">
+      <rect width="154" height="36" rx="9" fill="#E3F0E8" stroke="#2D6847" stroke-opacity="0.32" stroke-width="1"/>
+      <text x="77" y="22.5" text-anchor="middle" fill="#215236" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="12.5" font-weight="600">REACT 19 + VITE 8</text>
+    </g>
+  </g>
+
+  <rect x="1" y="1" width="1198" height="318" rx="20" stroke="#48311A" stroke-opacity="0.18" stroke-width="1.5"/>
+</svg>

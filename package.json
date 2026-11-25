@@ -1,8 +1,19 @@
 {
   "name": "cadence",
+  "description": "100% client-side browser teleprompter studio with reading pace calibration, microphone voice detection, programmable custom cues, and a 60fps webcam stage.",
   "private": true,
   "version": "1.0.0",
+  "license": "MIT",
   "type": "module",
+  "keywords": [
+    "teleprompter",
+    "webcam",
+    "web-audio",
+    "local-first",
+    "react",
+    "typescript",
+    "vite"
+  ],
   "engines": {
     "node": ">=20.0.0"
   },

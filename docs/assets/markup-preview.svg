@@ -1,0 +1,96 @@
+<svg width="1200" height="276" viewBox="0 0 1200 276" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cadence inline script markup syntax rendered in the live prompter stage">
+  <defs>
+    <linearGradient id="mpBg" x1="0" y1="0" x2="1200" y2="276" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1B1510"/>
+      <stop offset="100%" stop-color="#130F0C"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="1198" height="274" rx="18" fill="url(#mpBg)" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1.5"/>
+
+  <!-- Left Panel: Raw Script Source -->
+  <g transform="translate(28, 26)">
+    <rect width="540" height="224" rx="14" fill="#211A14" stroke="#F3EAD8" stroke-opacity="0.1" stroke-width="1.2"/>
+    <rect x="0" y="0" width="540" height="36" rx="14" fill="#29211A"/>
+    <rect x="0" y="24" width="540" height="12" fill="#29211A"/>
+    <line x1="0" y1="36" x2="540" y2="36" stroke="#F3EAD8" stroke-opacity="0.08" stroke-width="1"/>
+    <text x="18" y="23" fill="#B8A995" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="600" letter-spacing="0.9">SCRIPT SOURCE</text>
+    <text x="522" y="23" text-anchor="end" fill="#8C7C6A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">plain text + cues</text>
+
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13.5">
+      <text x="20" y="68" fill="#7AC49A">[MARKER: Opening Hook]</text>
+      <text x="20" y="96" fill="#E8DEC9">Good camera presence starts with</text>
+      <text x="20" y="118">
+        <tspan fill="#F3EAD8" font-weight="700">**relaxed pacing**</tspan>
+        <tspan fill="#E8DEC9"> and </tspan>
+        <tspan fill="#7AC49A">__steady eye-line__</tspan>
+        <tspan fill="#E8DEC9">.</tspan>
+      </text>
+      <text x="20" y="148">
+        <tspan fill="#D99B52">[PAUSE 2s]</tspan>
+        <tspan fill="#E8DEC9"> </tspan>
+        <tspan fill="#D99B52">[SPEED -12%]</tspan>
+      </text>
+      <text x="20" y="176">
+        <tspan fill="#EBC16B">==Never guess your scroll speed again.==</tspan>
+      </text>
+      <text x="20" y="204">
+        <tspan fill="#8C7C6A">~~(Hold smile until the lamp blinks)~~</tspan>
+      </text>
+    </g>
+  </g>
+
+  <!-- Center Arrow -->
+  <g transform="translate(580, 122)">
+    <rect width="40" height="32" rx="8" fill="#1D3327" stroke="#63AD82" stroke-opacity="0.4" stroke-width="1"/>
+    <path d="M13 16H27M22 11L27 16L22 21" stroke="#8CD4AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Right Panel: Live Prompter Stage -->
+  <g transform="translate(632, 26)">
+    <rect width="540" height="224" rx="14" fill="#0F0C09" stroke="#63AD82" stroke-opacity="0.32" stroke-width="1.2"/>
+    <rect x="0" y="0" width="540" height="36" rx="14" fill="#17120E"/>
+    <rect x="0" y="24" width="540" height="12" fill="#17120E"/>
+    <line x1="0" y1="36" x2="540" y2="36" stroke="#F3EAD8" stroke-opacity="0.08" stroke-width="1"/>
+    <text x="18" y="23" fill="#8CD4AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="600" letter-spacing="0.9">LIVE PROMPTER STAGE</text>
+    <text x="522" y="23" text-anchor="end" fill="#7AC49A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">142 WPM · 60FPS</text>
+
+    <!-- Active Reading Zone Band -->
+    <rect x="1" y="76" width="538" height="58" fill="#4E946C" fill-opacity="0.1"/>
+    <line x1="1" y1="76" x2="539" y2="76" stroke="#4E946C" stroke-opacity="0.35" stroke-width="1"/>
+    <line x1="1" y1="134" x2="539" y2="134" stroke="#4E946C" stroke-opacity="0.35" stroke-width="1"/>
+    <polygon points="10,99 18,105 10,111" fill="#63AD82"/>
+
+    <!-- Chapter Divider -->
+    <line x1="24" y1="58" x2="122" y2="58" stroke="#63AD82" stroke-opacity="0.35" stroke-width="1"/>
+    <text x="132" y="62" fill="#7AC49A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5" font-weight="600" letter-spacing="0.8">OPENING HOOK</text>
+    <line x1="234" y1="58" x2="516" y2="58" stroke="#63AD82" stroke-opacity="0.35" stroke-width="1"/>
+
+    <!-- Rendered Reading Line -->
+    <text x="28" y="100" fill="#F5EFE6" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="17">Good camera presence starts with</text>
+    <text x="28" y="124" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="17">
+      <tspan fill="#FFFFFF" font-weight="700">relaxed pacing</tspan>
+      <tspan fill="#F5EFE6"> and </tspan>
+      <tspan fill="#F5EFE6" font-weight="600">steady eye-line</tspan>
+      <tspan fill="#F5EFE6">.</tspan>
+    </text>
+    <!-- Accent underline beneath steady eye-line -->
+    <line x1="186" y1="128" x2="310" y2="128" stroke="#63AD82" stroke-width="2.5" stroke-linecap="round"/>
+
+    <!-- Cue Badges Row -->
+    <g transform="translate(28, 145)">
+      <rect width="92" height="22" rx="6" fill="#2F2316" stroke="#D99B52" stroke-opacity="0.55" stroke-width="1"/>
+      <text x="46" y="14.5" text-anchor="middle" fill="#EBC16B" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5" font-weight="600">PAUSE 2.0s</text>
+
+      <rect x="102" y="0" width="96" height="22" rx="6" fill="#1C3025" stroke="#63AD82" stroke-opacity="0.5" stroke-width="1"/>
+      <text x="150" y="14.5" text-anchor="middle" fill="#8CD4AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5" font-weight="600">SPEED -12%</text>
+    </g>
+
+    <!-- Highlighted punchline -->
+    <rect x="24" y="176" width="320" height="24" rx="5" fill="#D99B52" fill-opacity="0.22"/>
+    <text x="30" y="193" fill="#F8E7C9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15.5" font-weight="600">Never guess your scroll speed again.</text>
+
+    <!-- Softened aside -->
+    <text x="28" y="214" fill="#8C7C6A" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-style="italic">(Hold smile until the lamp blinks)</text>
+  </g>
+</svg>

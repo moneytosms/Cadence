@@ -1,0 +1,114 @@
+<svg width="1200" height="352" viewBox="0 0 1200 352" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cadence client-side architecture diagram">
+  <defs>
+    <linearGradient id="archBg" x1="0" y1="0" x2="1200" y2="352" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1B1510"/>
+      <stop offset="100%" stop-color="#130F0C"/>
+    </linearGradient>
+    <linearGradient id="colBox" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#261E17"/>
+      <stop offset="100%" stop-color="#1D1611"/>
+    </linearGradient>
+    <linearGradient id="colBoxPine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1E3327"/>
+      <stop offset="100%" stop-color="#17271E"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="1198" height="350" rx="18" fill="url(#archBg)" stroke="#F3EAD8" stroke-opacity="0.12" stroke-width="1.5"/>
+
+  <!-- Top header -->
+  <text x="34" y="36" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="600" letter-spacing="1.4">CLIENT-SIDE ARCHITECTURE</text>
+  <text x="1166" y="36" text-anchor="end" fill="#7AC49A" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5">100% IN-BROWSER · ZERO NETWORK CALLS</text>
+
+  <!-- Column 1: Browser APIs -->
+  <g transform="translate(34, 56)">
+    <rect width="320" height="236" rx="14" fill="url(#colBox)" stroke="#F3EAD8" stroke-opacity="0.1" stroke-width="1.2"/>
+    <text x="18" y="28" fill="#D99B52" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" font-weight="600" letter-spacing="1">BROWSER APIS</text>
+
+    <rect x="16" y="44" width="288" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="30" y="66" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600">Web Audio API</text>
+    <text x="30" y="84" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">AnalyserNode RMS dB + chime synth</text>
+
+    <rect x="16" y="106" width="288" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="30" y="128" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600">MediaDevices &amp; Fullscreen</text>
+    <text x="30" y="146" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Local webcam feed + mic capture</text>
+
+    <rect x="16" y="168" width="288" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="30" y="190" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600">localStorage Persistence</text>
+    <text x="30" y="208" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Scripts, cues, history, JSON export</text>
+  </g>
+
+  <!-- Connectors Col 1 -> Col 2 -->
+  <g stroke="#63AD82" stroke-opacity="0.45" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="358" y1="126" x2="404" y2="126"/>
+    <path d="M398 120L404 126L398 132"/>
+
+    <line x1="358" y1="188" x2="404" y2="188"/>
+    <path d="M398 182L404 188L398 194"/>
+
+    <line x1="358" y1="250" x2="404" y2="250"/>
+    <path d="M398 244L404 250L398 256"/>
+  </g>
+
+  <!-- Column 2: Core Engines -->
+  <g transform="translate(410, 56)">
+    <rect width="366" height="236" rx="14" fill="url(#colBoxPine)" stroke="#63AD82" stroke-opacity="0.34" stroke-width="1.2"/>
+    <text x="18" y="28" fill="#8CD4AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" font-weight="600" letter-spacing="1">CORE ENGINES (SRC/UTILS &amp; HOOKS)</text>
+
+    <rect x="16" y="44" width="334" height="52" rx="10" fill="#13221A" stroke="#63AD82" stroke-opacity="0.22" stroke-width="1"/>
+    <text x="30" y="66" fill="#F3EAD8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" font-weight="600">audioEngine.ts</text>
+    <text x="30" y="84" fill="#A9C7B5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12">MicVadController gate, hold timers, cue chimes</text>
+
+    <rect x="16" y="106" width="334" height="52" rx="10" fill="#13221A" stroke="#63AD82" stroke-opacity="0.22" stroke-width="1"/>
+    <text x="30" y="128" fill="#F3EAD8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" font-weight="600">scriptParser.ts</text>
+    <text x="30" y="146" fill="#A9C7B5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12">Tokenizer, custom cues, WPM &amp; duration solver</text>
+
+    <rect x="16" y="168" width="334" height="52" rx="10" fill="#13221A" stroke="#63AD82" stroke-opacity="0.22" stroke-width="1"/>
+    <text x="30" y="190" fill="#F3EAD8" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="13" font-weight="600">useLocalStorage.ts + App.tsx</text>
+    <text x="30" y="208" fill="#A9C7B5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12">Deep-merged state, theme sync, lazy code split</text>
+  </g>
+
+  <!-- Connectors Col 2 -> Col 3 -->
+  <g stroke="#D99B52" stroke-opacity="0.5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="780" y1="126" x2="826" y2="126"/>
+    <path d="M820 120L826 126L820 132"/>
+
+    <line x1="780" y1="188" x2="826" y2="188"/>
+    <path d="M820 182L826 188L820 194"/>
+
+    <line x1="780" y1="250" x2="826" y2="250"/>
+    <path d="M820 244L826 250L820 256"/>
+  </g>
+
+  <!-- Column 3: Studio Views -->
+  <g transform="translate(832, 56)">
+    <rect width="334" height="236" rx="14" fill="url(#colBox)" stroke="#F3EAD8" stroke-opacity="0.1" stroke-width="1.2"/>
+    <text x="18" y="28" fill="#D99B52" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11" font-weight="600" letter-spacing="1">STUDIO WORKSPACE (REACT 19)</text>
+
+    <rect x="16" y="44" width="146" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="28" y="66" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600">CalibrateView</text>
+    <text x="28" y="84" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5">Test + Pace Tiers</text>
+
+    <rect x="172" y="44" width="146" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="184" y="66" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600">ScriptStudio</text>
+    <text x="184" y="84" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5">Borderless Editor</text>
+
+    <rect x="16" y="106" width="146" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="28" y="128" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600">LibraryView</text>
+    <text x="28" y="146" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5">MD/TXT + Backup</text>
+
+    <rect x="172" y="106" width="146" height="52" rx="10" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.09" stroke-width="1"/>
+    <text x="184" y="128" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600">SettingsView</text>
+    <text x="184" y="146" fill="#A69682" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="10.5">Cues · Keys · Look</text>
+
+    <!-- Highlighted PrompterStage box -->
+    <rect x="16" y="168" width="302" height="52" rx="10" fill="#1D3327" stroke="#63AD82" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="30" y="190" fill="#F3EAD8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600">PrompterStage (Lazy Chunk)</text>
+    <text x="30" y="208" fill="#8CD4AA" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">translate3d 60fps · Webcam · Voice Guard</text>
+  </g>
+
+  <!-- Footer privacy strip -->
+  <rect x="34" y="308" width="1132" height="28" rx="8" fill="#18130F" stroke="#F3EAD8" stroke-opacity="0.07" stroke-width="1"/>
+  <circle cx="52" cy="322" r="3.5" fill="#63AD82"/>
+  <text x="64" y="326" fill="#B8A995" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11">Privacy guarantee: Camera video, microphone audio, scripts, and custom cues never leave the browser tab.</text>
+</svg>
