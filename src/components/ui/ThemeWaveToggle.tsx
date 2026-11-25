@@ -26,9 +26,9 @@ export const ThemeWaveToggle: React.FC<ThemeWaveToggleProps> = ({
       onClick={handleClick}
       aria-label={isDark ? 'Switch to light oak theme' : 'Switch to dark walnut theme'}
       title={isDark ? 'Sunlit Oak' : 'Dark Walnut'}
-      className={`relative h-9 px-2.5 rounded-[9px] wood-btn-surface inline-flex items-center justify-center gap-1.5 cursor-pointer overflow-visible focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50 group ${className}`}
+      className={`relative h-9 w-9 p-0 rounded-[9px] wood-btn-surface inline-flex items-center justify-center cursor-pointer overflow-visible focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50 ${className}`}
     >
-      {/* Expanding acoustic ring pulse on toggle */}
+      {/* Subtle expanding soundwave ring on toggle */}
       {pulseKey > 0 && (
         <span
           key={pulseKey}
@@ -37,51 +37,10 @@ export const ThemeWaveToggle: React.FC<ThemeWaveToggleProps> = ({
         />
       )}
 
-      {/* Left miniature cadence wave bars */}
+      {/* Clean rotating Sun / Moon icon */}
       <svg
-        width="10"
-        height="16"
-        viewBox="0 0 10 16"
-        fill="none"
-        aria-hidden="true"
-        className="shrink-0 text-[var(--accent-text)] opacity-85"
-      >
-        <rect
-          key={`l1-${pulseKey}`}
-          x="1"
-          y="5.5"
-          width="1.8"
-          height="5"
-          rx="0.9"
-          fill="currentColor"
-          className={pulseKey > 0 ? 'animate-wave-bar-1' : 'transition-transform duration-200 group-hover:scale-y-125 origin-center'}
-        />
-        <rect
-          key={`l2-${pulseKey}`}
-          x="4.5"
-          y="3"
-          width="1.8"
-          height="10"
-          rx="0.9"
-          fill="currentColor"
-          className={pulseKey > 0 ? 'animate-wave-bar-2' : 'transition-transform duration-200 group-hover:scale-y-75 origin-center'}
-        />
-        <rect
-          key={`l3-${pulseKey}`}
-          x="8"
-          y="6"
-          width="1.8"
-          height="4"
-          rx="0.9"
-          fill="currentColor"
-          className={pulseKey > 0 ? 'animate-wave-bar-3' : 'transition-transform duration-200 group-hover:scale-y-125 origin-center'}
-        />
-      </svg>
-
-      {/* Morphing Sun / Crescent Moon emblem */}
-      <svg
-        width="16"
-        height="16"
+        width="17"
+        height="17"
         viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"

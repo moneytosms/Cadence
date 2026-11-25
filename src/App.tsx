@@ -297,7 +297,7 @@ export default function App() {
 
             {/* Mobile Actions */}
             <div className="flex sm:hidden items-center gap-1.5 shrink-0">
-              <ThemeWaveToggle theme={uiTheme} onToggle={toggleUiTheme} className="h-8 px-2" />
+              <ThemeWaveToggle theme={uiTheme} onToggle={toggleUiTheme} className="h-8 w-8" />
               <ClayButton
                 variant={activeTab === 'settings' ? 'tonal' : 'surface'}
                 size="icon"
