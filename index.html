@@ -3,23 +3,73 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadence</title>
+    <title>Cadence - Natural Pace Teleprompter Studio</title>
     <meta
       name="description"
-      content="Calm, client-side teleprompter and reading speed studio."
+      content="Measure your natural speaking pace, edit scripts with programmable pauses and custom cues, and prompt smoothly on camera. 100% client-side in your browser."
     />
-    <meta property="og:title" content="Cadence" />
+    <meta name="theme-color" content="#15110E" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#EFE5D3" media="(prefers-color-scheme: light)" />
+
+    <!-- Favicons & Web App Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- OpenGraph Social Card -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cadence" />
+    <meta property="og:title" content="Cadence - Natural Pace Teleprompter Studio" />
     <meta
       property="og:description"
-      content="Measure your natural speaking pace and prompt smoothly on camera."
+      content="Measure your natural speaking pace, edit scripts with programmable pauses and custom cues, and prompt smoothly on camera. 100% client-side."
     />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23201A15'/%3E%3Cpath d='M32 10c-12.2 0-22 9.8-22 22s9.8 22 22 22c7.5 0 14.1-3.7 18.1-9.4' fill='none' stroke='%23B3A38E' stroke-width='2.6' stroke-linecap='round' opacity='0.55'/%3E%3Cpath d='M32 16.5c-8.6 0-15.5 6.9-15.5 15.5S23.4 47.5 32 47.5c5.5 0 10.4-2.9 13.1-7.2' fill='none' stroke='%23F3EAD8' stroke-width='2.8' stroke-linecap='round' opacity='0.85'/%3E%3Cpath d='M32 23c-5 0-9 4-9 9s4 9 9 9' fill='none' stroke='%2363AD82' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M35 32h3l2.5-8 4 16 3.5-11 2.5 5H55' fill='none' stroke='%2363AD82' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    <meta name="twitter:title" content="Cadence - Natural Pace Teleprompter Studio" />
+    <meta
+      name="twitter:description"
+      content="Measure your natural speaking pace, edit scripts with programmable pauses and custom cues, and prompt smoothly on camera."
     />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Cadence",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "description": "Client-side browser teleprompter studio with reading speed calibration, microphone pause detection, programmable custom cues, and webcam eye-line framing.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
+    <!-- Prevent theme flash before React hydrates -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('cadence_studio_settings_v1');
+          var theme = raw ? JSON.parse(raw).uiTheme : 'dark';
+          document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
+    <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

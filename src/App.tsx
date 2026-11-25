@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { Play, Settings, Undo2 } from 'lucide-react';
 import {
   CalibrationRecord,
@@ -20,9 +20,17 @@ import { ThemeWaveToggle } from './components/ui/ThemeWaveToggle';
 import { CalibrateView } from './components/CalibrateView';
 import { ScriptStudioView } from './components/ScriptStudioView';
 import { LibraryView } from './components/LibraryView';
-import { SettingsTab, SettingsView } from './components/SettingsView';
-import { LlmPromptModal } from './components/LlmPromptModal';
-import { PrompterStage } from './components/PrompterStage';
+import type { SettingsTab } from './components/SettingsView';
+
+const SettingsView = lazy(() =>
+  import('./components/SettingsView').then((m) => ({ default: m.SettingsView }))
+);
+const LlmPromptModal = lazy(() =>
+  import('./components/LlmPromptModal').then((m) => ({ default: m.LlmPromptModal }))
+);
+const PrompterStage = lazy(() =>
+  import('./components/PrompterStage').then((m) => ({ default: m.PrompterStage }))
+);
 
 interface SnackbarState {
   id: number;
@@ -445,47 +453,55 @@ export default function App() {
         )}
 
         {activeTab === 'settings' && (
-          <SettingsView
-            initialTab={settingsInitialTab}
-            settings={settings}
-            onUpdateSettings={setSettings}
-            onResetAllSettings={resetSettings}
-            onBack={() => setActiveTab(lastWorkspaceTab)}
-            onNotify={notify}
-          />
+          <Suspense fallback={null}>
+            <SettingsView
+              initialTab={settingsInitialTab}
+              settings={settings}
+              onUpdateSettings={setSettings}
+              onResetAllSettings={resetSettings}
+              onBack={() => setActiveTab(lastWorkspaceTab)}
+              onNotify={notify}
+            />
+          </Suspense>
         )}
       </main>
 
       {/* External LLM Prompt & Smart Importer */}
-      <LlmPromptModal
-        isOpen={isLlmModalOpen}
-        baselineWpm={speedProfile.baselineWpm}
-        currentScriptContent={activeScript.content}
-        beatDurationSeconds={settings.rules.beatDurationSeconds}
-        customCues={settings.customCues ?? []}
-        appearance={settings.appearance}
-        onClose={() => setIsLlmModalOpen(false)}
-        onImportReplace={(formatted) => {
-          handleUpdateActiveScript({ content: formatted, updatedAt: Date.now() });
-          notify('Script updated');
-        }}
-        onImportAsNew={(title, formatted) => {
-          handleCreateScript(title, formatted);
-        }}
-        onNotify={notify}
-      />
+      {isLlmModalOpen && (
+        <Suspense fallback={null}>
+          <LlmPromptModal
+            isOpen={isLlmModalOpen}
+            baselineWpm={speedProfile.baselineWpm}
+            currentScriptContent={activeScript.content}
+            beatDurationSeconds={settings.rules.beatDurationSeconds}
+            customCues={settings.customCues ?? []}
+            appearance={settings.appearance}
+            onClose={() => setIsLlmModalOpen(false)}
+            onImportReplace={(formatted) => {
+              handleUpdateActiveScript({ content: formatted, updatedAt: Date.now() });
+              notify('Script updated');
+            }}
+            onImportAsNew={(title, formatted) => {
+              handleCreateScript(title, formatted);
+            }}
+            onNotify={notify}
+          />
+        </Suspense>
+      )}
 
       {/* Full-Viewport Dark Prompter Stage */}
       {isPrompterOpen && (
-        <PrompterStage
-          script={activeScript}
-          baselineWpm={speedProfile.baselineWpm}
-          settings={settings}
-          onUpdateSettings={setSettings}
-          onApplyMeasuredBaseline={(wpm) => handleApplyBaselineWpm(wpm)}
-          onClose={() => setIsPrompterOpen(false)}
-          onNotify={notify}
-        />
+        <Suspense fallback={null}>
+          <PrompterStage
+            script={activeScript}
+            baselineWpm={speedProfile.baselineWpm}
+            settings={settings}
+            onUpdateSettings={setSettings}
+            onApplyMeasuredBaseline={(wpm) => handleApplyBaselineWpm(wpm)}
+            onClose={() => setIsPrompterOpen(false)}
+            onNotify={notify}
+          />
+        </Suspense>
       )}
 
       {/* Quiet Toast Notification */}

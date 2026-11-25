@@ -121,6 +121,10 @@ npm run lint
 npm run build
 ```
 
+### Deploying to Vercel
+
+Cadence ships with a preconfigured `vercel.json` (Vite framework, SPA routing rewrites, security & camera/microphone permission headers, and immutable asset caching). Connect the repository in Vercel and deploy with default settings (`npm install` / `npm run build` / `dist`).
+
 ---
 
 ## Architecture Overview

@@ -95,7 +95,7 @@ export const LlmPromptModal: React.FC<LlmPromptModalProps> = ({
             <h2 className="font-display text-[17px] font-semibold text-[var(--text-primary)]">
               External LLM Prompt
             </h2>
-            <ClaySegmented
+            <ClaySegmented<'build' | 'import'>
               value={tab}
               onChange={setTab}
               options={[
