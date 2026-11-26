@@ -26,6 +26,8 @@ interface CalibrateViewProps {
   speedProfile: SpeedProfile;
   calibrationHistory: CalibrationRecord[];
   settings: StudioSettings;
+  anchorNaturalWpm: number;
+  onAnchorNaturalWpmChange: (wpm: number) => void;
   onApplyBaselineWpm: (wpm: number, activeWpm?: number) => void;
   onSaveCalibrationRecord: (record: CalibrationRecord) => void;
   onDeleteCalibrationRecord: (id: string) => void;
@@ -37,6 +39,8 @@ export const CalibrateView: React.FC<CalibrateViewProps> = ({
   speedProfile,
   calibrationHistory,
   settings,
+  anchorNaturalWpm,
+  onAnchorNaturalWpmChange,
   onApplyBaselineWpm,
   onSaveCalibrationRecord,
   onDeleteCalibrationRecord,
@@ -85,13 +89,8 @@ export const CalibrateView: React.FC<CalibrateViewProps> = ({
   const isAboveNowRef = useRef<boolean>(false);
   const pausedFlagRef = useRef<boolean>(false);
 
-  // Keep the Slow / Natural / Brisk reference anchored so clicking Slow or Brisk
-  // highlights that tier cleanly instead of shifting Natural to the new speed.
-  const [anchorNaturalWpm, setAnchorNaturalWpm] = useState<number>(() => {
-    const raw = calibrationHistory[0] ? calibrationHistory[0].grossWpm : speedProfile.baselineWpm;
-    return Math.max(70, Math.min(250, Math.round(raw)));
-  });
-
+  // Keep the Slow / Natural / Brisk reference anchored across tab switches so clicking
+  // Slow or Brisk highlights that tier cleanly instead of shifting Natural to the new speed.
   const naturalWpm = Math.max(70, Math.min(250, Math.round(anchorNaturalWpm)));
   const slowWpm = Math.max(55, Math.min(naturalWpm - 10, Math.round(naturalWpm * 0.88)));
   const briskWpm = Math.min(280, Math.max(naturalWpm + 10, Math.round(naturalWpm * 1.12)));
@@ -272,7 +271,7 @@ export const CalibrateView: React.FC<CalibrateViewProps> = ({
     };
 
     setLatestResult(record);
-    setAnchorNaturalWpm(grossWpm);
+    onAnchorNaturalWpmChange(grossWpm);
     setSelectedTier('natural');
     onSaveCalibrationRecord(record);
     onApplyBaselineWpm(grossWpm, activeWpm);
@@ -633,7 +632,7 @@ export const CalibrateView: React.FC<CalibrateViewProps> = ({
                       size="sm"
                       onClick={() => {
                         setLatestResult(rec);
-                        setAnchorNaturalWpm(rec.grossWpm);
+                        onAnchorNaturalWpmChange(rec.grossWpm);
                         onApplyBaselineWpm(rec.grossWpm, rec.activeWpm);
                         onNotify(`Applied ${rec.grossWpm} WPM`);
                       }}

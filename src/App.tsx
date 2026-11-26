@@ -73,11 +73,31 @@ export default function App() {
     STARTER_SCRIPTS[0].id
   );
 
+  const [calibrationAnchorWpm, setCalibrationAnchorWpm] = useState<number>(() => {
+    const raw = calibrationHistory[0] ? calibrationHistory[0].grossWpm : speedProfile.baselineWpm;
+    return Math.max(70, Math.min(250, Math.round(raw)));
+  });
+
   const uiTheme: UiTheme = settings.uiTheme ?? 'dark';
 
   useEffect(() => {
     document.documentElement.dataset.theme = uiTheme;
   }, [uiTheme]);
+
+  // Reset scroll to top when switching views so new pages never open halfway down
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  // Lock background page scroll while fullscreen stage or LLM modal is open
+  useEffect(() => {
+    if (!isPrompterOpen && !isLlmModalOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isPrompterOpen, isLlmModalOpen]);
 
   const activeScript = useMemo(() => {
     return scripts.find((s) => s.id === activeScriptId) ?? scripts[0] ?? STARTER_SCRIPTS[0];
@@ -263,8 +283,31 @@ export default function App() {
           setScripts(data.scripts);
           setActiveScriptId(data.scripts[0].id);
         }
-        if (data.speedProfile?.baselineWpm) setSpeedProfile(data.speedProfile);
-        if (data.settings?.appearance) setSettings(data.settings);
+        if (data.speedProfile?.baselineWpm) {
+          setSpeedProfile({ ...DEFAULT_SPEED_PROFILE, ...data.speedProfile });
+        }
+        if (data.settings?.appearance) {
+          setSettings({
+            ...DEFAULT_STUDIO_SETTINGS,
+            ...data.settings,
+            appearance: { ...DEFAULT_STUDIO_SETTINGS.appearance, ...data.settings.appearance },
+            focusAndCamera: {
+              ...DEFAULT_STUDIO_SETTINGS.focusAndCamera,
+              ...(data.settings.focusAndCamera ?? {}),
+            },
+            physics: { ...DEFAULT_STUDIO_SETTINGS.physics, ...(data.settings.physics ?? {}) },
+            rules: { ...DEFAULT_STUDIO_SETTINGS.rules, ...(data.settings.rules ?? {}) },
+            vad: { ...DEFAULT_STUDIO_SETTINGS.vad, ...(data.settings.vad ?? {}) },
+            keybindings: {
+              ...DEFAULT_STUDIO_SETTINGS.keybindings,
+              ...(data.settings.keybindings ?? {}),
+            },
+            editor: { ...DEFAULT_STUDIO_SETTINGS.editor, ...(data.settings.editor ?? {}) },
+            customCues: Array.isArray(data.settings.customCues)
+              ? data.settings.customCues
+              : DEFAULT_STUDIO_SETTINGS.customCues,
+          });
+        }
         if (Array.isArray(data.calibrationHistory)) setCalibrationHistory(data.calibrationHistory);
         notify('Backup restored');
       } catch {
@@ -405,6 +448,8 @@ export default function App() {
             speedProfile={speedProfile}
             calibrationHistory={calibrationHistory}
             settings={settings}
+            anchorNaturalWpm={calibrationAnchorWpm}
+            onAnchorNaturalWpmChange={setCalibrationAnchorWpm}
             onApplyBaselineWpm={handleApplyBaselineWpm}
             onSaveCalibrationRecord={handleSaveCalibrationRecord}
             onDeleteCalibrationRecord={handleDeleteCalibrationRecord}
@@ -497,7 +542,11 @@ export default function App() {
             baselineWpm={speedProfile.baselineWpm}
             settings={settings}
             onUpdateSettings={setSettings}
-            onApplyMeasuredBaseline={(wpm) => handleApplyBaselineWpm(wpm)}
+            onApplyMeasuredBaseline={(wpm) => {
+              const clampedAnchor = Math.max(70, Math.min(250, Math.round(wpm)));
+              setCalibrationAnchorWpm(clampedAnchor);
+              handleApplyBaselineWpm(wpm);
+            }}
             onClose={() => setIsPrompterOpen(false)}
             onNotify={notify}
           />

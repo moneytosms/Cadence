@@ -71,8 +71,18 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
         setCardMenuId(null);
       }
     };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIoMenuOpen(false);
+        setCardMenuId(null);
+      }
+    };
     document.addEventListener('mousedown', onDocClick);
-    return () => document.removeEventListener('mousedown', onDocClick);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      window.removeEventListener('keydown', onKeyDown);
+    };
   }, []);
 
   const filteredScripts = useMemo(() => {

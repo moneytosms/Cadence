@@ -116,7 +116,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     font-size: 15px;
     background-color: var(--bg-canvas);
     scrollbar-width: thin;

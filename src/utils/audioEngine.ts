@@ -92,6 +92,7 @@ export class MicVadController {
   private aboveSinceMs: number | null = null;
   private belowSinceMs: number | null = null;
   private smoothedDb = -60;
+  private stopped = false;
 
   constructor(
     options: {
@@ -119,11 +120,12 @@ export class MicVadController {
   }
 
   public async start(): Promise<void> {
+    this.stopped = false;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       throw new Error('Microphone access is not supported in this browser.');
     }
 
-    this.stream = await navigator.mediaDevices.getUserMedia({
+    const acquiredStream = await navigator.mediaDevices.getUserMedia({
       audio: {
         echoCancellation: true,
         noiseSuppression: true,
@@ -132,10 +134,18 @@ export class MicVadController {
       video: false,
     });
 
+    if (this.stopped) {
+      acquiredStream.getTracks().forEach((t) => t.stop());
+      return;
+    }
+
+    this.stream = acquiredStream;
+
     const AudioCtx =
       window.AudioContext ||
       (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioCtx) {
+      this.stop();
       throw new Error('Web Audio API is unavailable.');
     }
 
@@ -196,6 +206,7 @@ export class MicVadController {
   }
 
   public stop() {
+    this.stopped = true;
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;

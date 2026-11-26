@@ -125,6 +125,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
   const loopTimeoutRef = useRef<number | null>(null);
   const countdownTimerRef = useRef<number | null>(null);
   const dockHideTimerRef = useRef<number | null>(null);
+  const bannerTimeoutRef = useRef<number | null>(null);
   const settingsRef = useRef<StudioSettings>(settings);
   settingsRef.current = settings;
 
@@ -212,11 +213,37 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
     }
   }, [isPlaying, quickDrawerOpen, settings.rules.alwaysShowDock, pokeDock]);
 
+  const showTransientBanner = useCallback((message: string, durationMs = 1500) => {
+    if (bannerTimeoutRef.current) window.clearTimeout(bannerTimeoutRef.current);
+    setActiveCueBanner(message);
+    bannerTimeoutRef.current = window.setTimeout(() => {
+      bannerTimeoutRef.current = null;
+      setActiveCueBanner(null);
+    }, durationMs);
+  }, []);
+
+  const setPersistentBanner = useCallback((message: string | null) => {
+    if (bannerTimeoutRef.current) {
+      window.clearTimeout(bannerTimeoutRef.current);
+      bannerTimeoutRef.current = null;
+    }
+    setActiveCueBanner(message);
+  }, []);
+
   useEffect(() => {
+    const onFsChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
     return () => {
+      document.removeEventListener('fullscreenchange', onFsChange);
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.().catch(() => {});
+      }
       if (countdownTimerRef.current) window.clearInterval(countdownTimerRef.current);
       if (loopTimeoutRef.current) window.clearTimeout(loopTimeoutRef.current);
       if (dockHideTimerRef.current) window.clearTimeout(dockHideTimerRef.current);
+      if (bannerTimeoutRef.current) window.clearTimeout(bannerTimeoutRef.current);
     };
   }, []);
 
@@ -642,10 +669,10 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                 pausesTriggeredCountRef.current += 1;
                 if (cfg.rules.pauseCueMode === 'manualTap') {
                   manualCueHoldRef.current = true;
-                  setActiveCueBanner(`${cue.label} · Space to resume`);
+                  setPersistentBanner(`${cue.label} · Space to resume`);
                 } else {
                   cuePauseRemainingRef.current = cue.value ?? 1.5;
-                  setActiveCueBanner(`Pause · ${cuePauseRemainingRef.current.toFixed(1)}s`);
+                  setPersistentBanner(`Pause · ${cuePauseRemainingRef.current.toFixed(1)}s`);
                 }
               } else if (cue.type === 'speedAbsolute' && cue.value) {
                 rampStartWpmRef.current = effectiveWpmRef.current;
@@ -654,8 +681,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                 rampDurationRef.current = cfg.physics.speedRampSeconds;
                 targetWpmRef.current = cue.value;
                 setDisplayWpm(cue.value);
-                setActiveCueBanner(`${cue.value} WPM`);
-                window.setTimeout(() => setActiveCueBanner(null), 1600);
+                showTransientBanner(`${cue.value} WPM`, 1600);
               } else if (cue.type === 'speedRelative' && cue.value !== undefined) {
                 const next = Math.max(
                   55,
@@ -667,8 +693,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                 rampDurationRef.current = cfg.physics.speedRampSeconds;
                 targetWpmRef.current = next;
                 setDisplayWpm(next);
-                setActiveCueBanner(`${next} WPM`);
-                window.setTimeout(() => setActiveCueBanner(null), 1600);
+                showTransientBanner(`${next} WPM`, 1600);
               } else if (cue.type === 'speedReset') {
                 rampStartWpmRef.current = effectiveWpmRef.current;
                 rampEndWpmRef.current = initialWpm;
@@ -676,8 +701,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                 rampDurationRef.current = cfg.physics.speedRampSeconds;
                 targetWpmRef.current = initialWpm;
                 setDisplayWpm(initialWpm);
-                setActiveCueBanner(`${initialWpm} WPM`);
-                window.setTimeout(() => setActiveCueBanner(null), 1400);
+                showTransientBanner(`${initialWpm} WPM`, 1400);
               } else if (cue.type === 'beep') {
                 playCueBeep(cfg.rules.beepCueVolume);
               } else if (cue.type === 'marker') {
@@ -688,7 +712,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                   window.setTimeout(() => setMarkerPulse(false), 600);
                 } else if (cfg.rules.markerBehavior === 'autoPause') {
                   manualCueHoldRef.current = true;
-                  setActiveCueBanner(`${cue.label} · Space to continue`);
+                  setPersistentBanner(`${cue.label} · Space to continue`);
                 }
               } else if (cue.type === 'custom') {
                 if (cue.tone && cue.tone !== 'none') {
@@ -719,14 +743,13 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
                   pausesTriggeredCountRef.current += 1;
                   if (cfg.rules.pauseCueMode === 'manualTap') {
                     manualCueHoldRef.current = true;
-                    setActiveCueBanner(`${cue.label} · Space to resume`);
+                    setPersistentBanner(`${cue.label} · Space to resume`);
                   } else {
                     cuePauseRemainingRef.current = cue.value;
-                    setActiveCueBanner(`${cue.label} · ${cue.value.toFixed(1)}s`);
+                    setPersistentBanner(`${cue.label} · ${cue.value.toFixed(1)}s`);
                   }
                 } else {
-                  setActiveCueBanner(cue.label);
-                  window.setTimeout(() => setActiveCueBanner(null), 1500);
+                  showTransientBanner(cue.label, 1500);
                 }
               }
             }
@@ -781,19 +804,21 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
     initialWpm,
     openTakeSummaryNow,
     resetStage,
+    setPersistentBanner,
+    showTransientBanner,
   ]);
 
   const toggleFullscreen = useCallback(() => {
     const el = stageRootRef.current;
     if (!el) return;
     if (!document.fullscreenElement) {
-      el.requestFullscreen?.().catch(() => {});
-      setIsFullscreen(true);
+      el.requestFullscreen?.().catch(() => {
+        onNotify('Fullscreen unavailable here');
+      });
     } else {
       document.exitFullscreen?.().catch(() => {});
-      setIsFullscreen(false);
     }
-  }, []);
+  }, [onNotify]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -1430,25 +1455,27 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
       {/* Post-Take Pace Summary */}
       {takeSummary && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-5">
-          <div className="w-full max-w-md rounded-[26px] wood-card text-[#F3EAD8] p-6 space-y-5 shadow-2xl">
-            <h2 className="font-display text-[23px] font-semibold">{takeSummary.scriptTitle}</h2>
+          <div className="w-full max-w-md rounded-[26px] wood-card text-[var(--text-primary)] p-6 space-y-5 shadow-2xl">
+            <h2 className="font-display text-[23px] font-semibold text-[var(--text-primary)]">
+              {takeSummary.scriptTitle}
+            </h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-[16px] wood-inset p-4">
-                <div className="text-[12px] text-[#A99985]">Time</div>
-                <div className="font-mono-tabular text-[24px] font-bold mt-0.5">
+                <div className="text-[12px] text-[var(--text-secondary)]">Time</div>
+                <div className="font-mono-tabular text-[24px] font-bold text-[var(--text-primary)] mt-0.5">
                   {formatDuration(takeSummary.actualSeconds)}
                 </div>
-                <div className="text-[12px] text-[#857562] font-mono-tabular">
+                <div className="text-[12px] text-[var(--text-muted)] font-mono-tabular">
                   est. {formatDuration(takeSummary.estimatedSeconds)}
                 </div>
               </div>
               <div className="rounded-[16px] wood-inset p-4">
-                <div className="text-[12px] text-[#A99985]">Effective Pace</div>
-                <div className="font-mono-tabular text-[24px] font-bold text-[#63AD82] mt-0.5">
+                <div className="text-[12px] text-[var(--text-secondary)]">Effective Pace</div>
+                <div className="font-mono-tabular text-[24px] font-bold text-[var(--accent-text)] mt-0.5">
                   {takeSummary.effectiveWpm} WPM
                 </div>
-                <div className="text-[12px] text-[#857562] font-mono-tabular">
+                <div className="text-[12px] text-[var(--text-muted)] font-mono-tabular">
                   target {takeSummary.targetWpm}
                 </div>
               </div>
@@ -1478,7 +1505,7 @@ export const PrompterStage: React.FC<PrompterStageProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="min-h-[46px] px-4 rounded-[15px] text-[#B3A38E] hover:text-[#F3EAD8] font-semibold text-[14px] cursor-pointer"
+                className="min-h-[46px] px-4 rounded-[15px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-semibold text-[14px] cursor-pointer"
               >
                 Exit
               </button>

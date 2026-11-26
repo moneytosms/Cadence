@@ -83,6 +83,8 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
   const [floatingBar, setFloatingBar] = useState<FloatingBarState>({ x: 0, y: 0, visible: false });
 
+  const lastSelectionRef = useRef<{ start: number; end: number }>({ start: 0, end: 0 });
+
   const [targetMin, setTargetMin] = useState<string>(
     script.targetSeconds ? String(Math.floor(script.targetSeconds / 60)) : '1'
   );
@@ -90,16 +92,32 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
     script.targetSeconds ? String(script.targetSeconds % 60).padStart(2, '0') : '30'
   );
 
+  // Sync target solver inputs & reset tracked cursor when switching scripts
+  useEffect(() => {
+    setTargetMin(script.targetSeconds ? String(Math.floor(script.targetSeconds / 60)) : '1');
+    setTargetSec(
+      script.targetSeconds ? String(script.targetSeconds % 60).padStart(2, '0') : '30'
+    );
+    lastSelectionRef.current = { start: 0, end: 0 };
+  }, [script.id, script.targetSeconds]);
+
   const toolbarMode = settings.editor?.toolbarMode ?? 'compact';
   const wideCanvas = settings.editor?.wideCanvas ?? false;
   const customCues = settings.customCues ?? [];
 
-  // Auto-grow borderless textarea for a single smooth page scrollbar (zero double scrollbars)
+  // Auto-grow borderless textarea while strictly preserving page scroll position
+  // so typing or inserting cues never collapses height and jolts window.scrollY.
   const syncTextareaHeight = useCallback(() => {
     const el = textareaRef.current;
     if (!el) return;
-    el.style.height = 'auto';
-    el.style.height = `${Math.max(440, el.scrollHeight + 32)}px`;
+    const prevScrollX = window.scrollX;
+    const prevScrollY = window.scrollY;
+    el.style.height = '0px';
+    const nextHeight = `${Math.max(440, el.scrollHeight + 32)}px`;
+    el.style.height = nextHeight;
+    if (window.scrollY !== prevScrollY || window.scrollX !== prevScrollX) {
+      window.scrollTo(prevScrollX, prevScrollY);
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -112,6 +130,32 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
     window.addEventListener('resize', syncTextareaHeight);
     return () => window.removeEventListener('resize', syncTextareaHeight);
   }, [syncTextareaHeight]);
+
+  const captureSelection = useCallback(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    lastSelectionRef.current = {
+      start: el.selectionStart,
+      end: el.selectionEnd,
+    };
+  }, []);
+
+  // Restore focus & caret without letting the browser scroll the tall textarea to the bottom
+  const restoreSelectionWithoutScroll = useCallback(
+    (start: number, end: number, scrollX: number, scrollY: number) => {
+      lastSelectionRef.current = { start, end };
+      requestAnimationFrame(() => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.focus({ preventScroll: true });
+        el.setSelectionRange(start, end);
+        if (window.scrollY !== scrollY || window.scrollX !== scrollX) {
+          window.scrollTo(scrollX, scrollY);
+        }
+      });
+    },
+    []
+  );
 
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
@@ -181,9 +225,16 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   const wrapSelection = useCallback(
     (prefix: string, suffix: string, fallback = 'phrase') => {
       const el = textareaRef.current;
-      if (!el) return;
-      const start = el.selectionStart;
-      const end = el.selectionEnd;
+      if (!el || showPreview) return;
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      const isFocused = document.activeElement === el;
+      const rawStart = isFocused ? el.selectionStart : lastSelectionRef.current.start;
+      const rawEnd = isFocused ? el.selectionEnd : lastSelectionRef.current.end;
+      const len = script.content.length;
+      const start = Math.max(0, Math.min(len, rawStart));
+      const end = Math.max(start, Math.min(len, rawEnd));
+
       const selected = script.content.slice(start, end) || fallback;
       const next =
         script.content.slice(0, start) +
@@ -194,48 +245,74 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
       onUpdateScript({ content: next, updatedAt: Date.now() });
       setContextMenu(null);
       setFloatingBar((f) => ({ ...f, visible: false }));
-      requestAnimationFrame(() => {
-        el.focus();
-        el.setSelectionRange(start + prefix.length, start + prefix.length + selected.length);
-      });
+      restoreSelectionWithoutScroll(
+        start + prefix.length,
+        start + prefix.length + selected.length,
+        scrollX,
+        scrollY
+      );
     },
-    [onUpdateScript, script.content]
+    [onUpdateScript, restoreSelectionWithoutScroll, script.content, showPreview]
   );
 
   const insertAtCursor = useCallback(
-    (snippet: string, asOwnLine = false) => {
+    (snippet: string, asOwnLine = false, addTrailingSpace = true) => {
       const el = textareaRef.current;
-      if (!el) return;
-      const start = el.selectionStart;
-      const end = el.selectionEnd;
+      if (!el || showPreview) return;
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+      const isFocused = document.activeElement === el;
+      const rawStart = isFocused ? el.selectionStart : lastSelectionRef.current.start;
+      const rawEnd = isFocused ? el.selectionEnd : lastSelectionRef.current.end;
+      const len = script.content.length;
+      const start = Math.max(0, Math.min(len, rawStart));
+      const end = Math.max(start, Math.min(len, rawEnd));
+
       const before = script.content.slice(0, start);
       const after = script.content.slice(end);
       const lead = asOwnLine && before.length > 0 && !before.endsWith('\n') ? '\n' : '';
-      const trail = asOwnLine && after.length > 0 && !after.startsWith('\n') ? '\n' : ' ';
+      const trail = asOwnLine
+        ? after.length > 0 && !after.startsWith('\n')
+          ? '\n'
+          : ''
+        : addTrailingSpace && (after.length === 0 || !/^\s/.test(after))
+          ? ' '
+          : '';
       const inserted = `${lead}${snippet}${trail}`;
       const next = before + inserted + after;
       onUpdateScript({ content: next, updatedAt: Date.now() });
       setCueMenuOpen(false);
       setContextMenu(null);
-      requestAnimationFrame(() => {
-        el.focus();
-        const pos = before.length + inserted.length;
-        el.setSelectionRange(pos, pos);
-      });
+      const pos = before.length + inserted.length;
+      restoreSelectionWithoutScroll(pos, pos, scrollX, scrollY);
     },
-    [onUpdateScript, script.content]
+    [onUpdateScript, restoreSelectionWithoutScroll, script.content, showPreview]
   );
 
-  const jumpToMarkerInEditor = (markerTitle: string) => {
+  const jumpToMarkerInEditor = (markerId: string, markerTitle: string) => {
+    if (showPreview) {
+      const target = document.getElementById(`preview-marker-${markerId}`);
+      if (target) {
+        const y = target.getBoundingClientRect().top + window.scrollY - 140;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+      return;
+    }
     const el = textareaRef.current;
-    if (!el || showPreview) return;
-    const needle = `[MARKER: ${markerTitle}]`;
-    const idx = script.content.indexOf(needle);
-    if (idx < 0) return;
-    el.focus();
-    el.setSelectionRange(idx, idx + needle.length);
-    const linesBefore = script.content.slice(0, idx).split('\n').length;
-    const approxTop = Math.max(0, el.offsetTop + linesBefore * 26 - 180);
+    if (!el) return;
+    const escaped = markerTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`\\[(?:MARKER|SECTION|CHAPTER)\\s*:\\s*${escaped}\\]`, 'i');
+    const match = regex.exec(script.content);
+    if (!match) return;
+    const idx = match.index;
+    const matchLen = match[0].length;
+    el.focus({ preventScroll: true });
+    el.setSelectionRange(idx, idx + matchLen);
+    lastSelectionRef.current = { start: idx, end: idx + matchLen };
+    const linesBefore = script.content.slice(0, idx).split('\n').length - 1;
+    const lineHeightPx = 28.6;
+    const elTop = el.getBoundingClientRect().top + window.scrollY;
+    const approxTop = Math.max(0, elTop + linesBefore * lineHeightPx - 180);
     window.scrollTo({ top: approxTop, behavior: 'smooth' });
   };
 
@@ -258,9 +335,14 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   const handleEditorContextMenu = (e: React.MouseEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     const el = textareaRef.current;
+    if (el) {
+      lastSelectionRef.current = { start: el.selectionStart, end: el.selectionEnd };
+    }
     const hasSelection = !!el && el.selectionEnd > el.selectionStart;
-    const menuW = 224;
-    const menuH = 340;
+    const menuW = 228;
+    const extraCustomRows = Math.min(4, customCues.length) * 34;
+    const selectionRows = hasSelection ? 68 : 0;
+    const menuH = Math.min(window.innerHeight - 24, 210 + extraCustomRows + selectionRows);
     const x = Math.min(e.clientX, window.innerWidth - menuW - 12);
     const y = Math.min(e.clientY, window.innerHeight - menuH - 12);
     setContextMenu({ x: Math.max(12, x), y: Math.max(12, y), hasSelection });
@@ -268,6 +350,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   };
 
   const handleEditorMouseUp = (e: React.MouseEvent<HTMLTextAreaElement>) => {
+    captureSelection();
     if (toolbarMode !== 'floating') return;
     const el = textareaRef.current;
     if (!el) return;
@@ -284,8 +367,12 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   const handleContextCopy = async (cut: boolean) => {
     const el = textareaRef.current;
     if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const isFocused = document.activeElement === el;
+    const len = script.content.length;
+    const start = Math.max(0, Math.min(len, isFocused ? el.selectionStart : lastSelectionRef.current.start));
+    const end = Math.max(start, Math.min(len, isFocused ? el.selectionEnd : lastSelectionRef.current.end));
     if (end <= start) return;
     const text = script.content.slice(start, end);
     try {
@@ -293,6 +380,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
       if (cut) {
         const next = script.content.slice(0, start) + script.content.slice(end);
         onUpdateScript({ content: next, updatedAt: Date.now() });
+        restoreSelectionWithoutScroll(start, start, scrollX, scrollY);
       }
       onNotify(cut ? 'Cut' : 'Copied');
     } catch {
@@ -304,7 +392,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
   const handleContextPaste = async () => {
     try {
       const clip = await navigator.clipboard.readText();
-      if (clip) insertAtCursor(clip, false);
+      if (clip) insertAtCursor(clip, false, false);
     } catch {
       onNotify('Use Ctrl+V / Cmd+V');
     }
@@ -373,40 +461,48 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
               <>
                 <button
                   type="button"
+                  disabled={showPreview}
                   title="Bold (Ctrl+B)"
                   aria-label="Bold"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => wrapSelection('**', '**', 'bold')}
-                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] inline-flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--text-primary)] inline-flex items-center justify-center cursor-pointer disabled:opacity-35 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                 >
                   <Bold className="w-3.5 h-3.5" />
                 </button>
 
                 <button
                   type="button"
+                  disabled={showPreview}
                   title="Underline (Ctrl+U)"
                   aria-label="Underline"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => wrapSelection('__', '__', 'phrase')}
-                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--accent-text)] inline-flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--accent-text)] inline-flex items-center justify-center cursor-pointer disabled:opacity-35 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                 >
                   <Underline className="w-3.5 h-3.5" />
                 </button>
 
                 <button
                   type="button"
+                  disabled={showPreview}
                   title="Highlight (Ctrl+Shift+H)"
                   aria-label="Highlight"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => wrapSelection('==', '==', 'key point')}
-                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--amber)] inline-flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--amber)] inline-flex items-center justify-center cursor-pointer disabled:opacity-35 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                 >
                   <Highlighter className="w-3.5 h-3.5" />
                 </button>
 
                 <button
                   type="button"
+                  disabled={showPreview}
                   title="Soften aside"
                   aria-label="Soften aside"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => wrapSelection('~~', '~~', 'aside')}
-                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] inline-flex items-center justify-center cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
+                  className="h-8 w-8 rounded-[7px] hover:bg-[var(--bg-surface-hover)] text-[var(--text-secondary)] inline-flex items-center justify-center cursor-pointer disabled:opacity-35 disabled:pointer-events-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]/50"
                 >
                   <Italic className="w-3.5 h-3.5" />
                 </button>
@@ -420,6 +516,8 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
               <ClayButton
                 variant={cueMenuOpen ? 'tonal' : 'surface'}
                 size="sm"
+                disabled={showPreview}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setCueMenuOpen((o) => !o)}
                 tip="Insert pause, marker, or custom cue"
               >
@@ -428,8 +526,11 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
                 <ChevronDown className="w-3 h-3 opacity-65" />
               </ClayButton>
 
-              {cueMenuOpen && (
-                <div className="absolute left-0 top-full mt-1.5 z-40 w-52 max-h-[68vh] overflow-y-auto rounded-[12px] wood-popover p-1.5 space-y-0.5">
+              {cueMenuOpen && !showPreview && (
+                <div
+                  onMouseDown={(e) => e.preventDefault()}
+                  className="absolute left-0 top-full mt-1.5 z-40 w-52 max-h-[68vh] overflow-y-auto rounded-[12px] wood-popover p-1.5 space-y-0.5"
+                >
                   {[
                     { label: 'Pause 2s', action: () => insertAtCursor('[PAUSE 2s]', true) },
                     { label: 'Pause 3s', action: () => insertAtCursor('[PAUSE 3s]', true) },
@@ -610,7 +711,12 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
             <ClayButton
               variant={showPreview ? 'tonal' : 'surface'}
               size="sm"
-              onClick={() => setShowPreview((p) => !p)}
+              onClick={() => {
+                setCueMenuOpen(false);
+                setContextMenu(null);
+                setFloatingBar((f) => ({ ...f, visible: false }));
+                setShowPreview((p) => !p);
+              }}
               tip={showPreview ? 'Return to editor' : 'Preview prompter formatting'}
             >
               {showPreview ? (
@@ -727,7 +833,10 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
 
         {/* Expanded Cue Ribbon */}
         {toolbarMode === 'expanded' && !showPreview && (
-          <div className="flex items-center gap-1.5 flex-wrap pt-2 mt-2 border-t border-[var(--border-subtle)]">
+          <div
+            onMouseDown={(e) => e.preventDefault()}
+            className="flex items-center gap-1.5 flex-wrap pt-2 mt-2 border-t border-[var(--border-subtle)]"
+          >
             {[
               { label: 'Pause 2s', snippet: '[PAUSE 2s]', ownLine: true },
               { label: 'Beat', snippet: '[BEAT]', ownLine: false },
@@ -780,7 +889,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
               <button
                 key={m.id}
                 type="button"
-                onClick={() => jumpToMarkerInEditor(m.title)}
+                onClick={() => jumpToMarkerInEditor(m.id, m.title)}
                 title={`Jump to ${m.title}`}
                 className="h-6 px-2.5 rounded-[6px] bg-[var(--bg-inset)] hover:bg-[var(--bg-surface-hover)] font-mono-tabular text-[11px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer transition-colors"
               >
@@ -797,11 +906,21 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
           <textarea
             ref={textareaRef}
             value={script.content}
-            onChange={(e) => onUpdateScript({ content: e.target.value, updatedAt: Date.now() })}
+            onChange={(e) => {
+              lastSelectionRef.current = {
+                start: e.target.selectionStart,
+                end: e.target.selectionEnd,
+              };
+              onUpdateScript({ content: e.target.value, updatedAt: Date.now() });
+            }}
             onKeyDown={handleEditorKeyDown}
+            onKeyUp={captureSelection}
+            onClick={captureSelection}
+            onSelect={captureSelection}
             onContextMenu={handleEditorContextMenu}
             onMouseUp={handleEditorMouseUp}
             onBlur={() => {
+              captureSelection();
               setTimeout(() => setFloatingBar((f) => ({ ...f, visible: false })), 180);
             }}
             spellCheck
@@ -818,14 +937,21 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
               lineHeight: settings.appearance.lineHeight,
             }}
           >
-            {compiled.blocks.map((block) => (
-              <RichBlockView
-                key={block.index}
-                block={block}
-                appearance={settings.appearance}
-                compact
-              />
-            ))}
+            {compiled.blocks.map((block) => {
+              const markerCue = block.kind === 'marker' ? block.cues.find((c) => c.type === 'marker') : undefined;
+              return (
+                <div
+                  key={block.index}
+                  id={markerCue ? `preview-marker-${markerCue.id}` : undefined}
+                >
+                  <RichBlockView
+                    block={block}
+                    appearance={settings.appearance}
+                    compact
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
 
@@ -903,7 +1029,7 @@ export const ScriptStudioView: React.FC<ScriptStudioViewProps> = ({
           ref={contextMenuRef}
           style={{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }}
           onMouseDown={(e) => e.preventDefault()}
-          className="fixed z-50 w-56 rounded-[12px] wood-popover p-1.5 space-y-1"
+          className="fixed z-50 w-56 max-h-[82vh] overflow-y-auto rounded-[12px] wood-popover p-1.5 space-y-1"
         >
           <div className="flex items-center justify-between gap-1 px-1 py-0.5">
             <button

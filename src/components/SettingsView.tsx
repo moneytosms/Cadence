@@ -227,6 +227,13 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       onNotify('Enter a cue tag name');
       return;
     }
+    if (
+      /^(PAUSE(\s+\d+(\.\d+)?s?)?|BEAT|BEEP|CHIME|SPEED\s+.*)$/i.test(cleanedTag) ||
+      /^(MARKER|SECTION|CHAPTER)\s*:/i.test(cleanedTag)
+    ) {
+      onNotify(`[${cleanedTag}] is reserved for a built-in cue`);
+      return;
+    }
     const exists = (settings.customCues ?? []).some(
       (c) => c.tag.toUpperCase() === cleanedTag
     );

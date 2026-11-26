@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Check, ClipboardCopy, FileInput, FilePlus2, X } from 'lucide-react';
 import { CustomCueDefinition, PromptBuilderConfig, PrompterAppearance } from '../types/prompter';
 import { DEFAULT_PROMPT_BUILDER_CONFIG, resolveStageColors } from '../data/defaults';
@@ -10,7 +10,7 @@ import {
   formatDurationHuman,
 } from '../utils/scriptParser';
 import { ClayButton, ClaySegmented, ClaySlider, ClaySwitch } from './ui/ClayControls';
-import { RichBlockView } from './RichTextRenderer';
+import { getPrompterFontCss, RichBlockView } from './RichTextRenderer';
 
 interface LlmPromptModalProps {
   isOpen: boolean;
@@ -66,6 +66,21 @@ export const LlmPromptModal: React.FC<LlmPromptModalProps> = ({
     [compiledImport, baselineWpm]
   );
 
+  useEffect(() => {
+    setConfig((c) => ({ ...c, targetWpm: baselineWpm }));
+  }, [baselineWpm]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleCopyPrompt = async () => {
@@ -87,8 +102,12 @@ export const LlmPromptModal: React.FC<LlmPromptModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-label="External LLM Prompt"
+      onClick={onClose}
     >
-      <div className="wood-popover w-full max-w-4xl max-h-[88vh] rounded-[16px] flex flex-col overflow-hidden">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="wood-popover w-full max-w-4xl max-h-[88vh] rounded-[16px] flex flex-col overflow-hidden"
+      >
         {/* Header */}
         <div className="flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3.5 flex-wrap">
@@ -288,6 +307,7 @@ export const LlmPromptModal: React.FC<LlmPromptModalProps> = ({
                   className="rounded-[12px] p-4 min-h-[290px] max-h-[380px] overflow-y-auto border border-[var(--border-subtle)]"
                   style={{
                     backgroundColor: stageColors.bg,
+                    fontFamily: getPrompterFontCss(appearance.fontFamily),
                     fontSize: '16px',
                     lineHeight: 1.55,
                   }}
